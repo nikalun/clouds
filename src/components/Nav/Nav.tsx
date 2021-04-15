@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import { Tabs } from "../Tabs";
 
@@ -8,7 +7,7 @@ import './Nav.css';
 const links = [
   {
     id: 1,
-    url: '/about',
+    url: '/',
     value: 'О приложении',
     className: 'nav__link',
   },

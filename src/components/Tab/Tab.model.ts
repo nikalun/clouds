@@ -1,7 +1,8 @@
 export type TabProps = {
-  id: number;
+  isActive?: boolean;
+  id: string | number;
   value: string;
   url?: string;
   className?: string;
-  onClick?: (value: number) => void;
+  onClick?: (value: string | number) => void;
 };

@@ -2,5 +2,9 @@
     padding: 10px;
     cursor: pointer;
     color: #ffffff;
-    background-color: #BF7630;
+    background-color: #342F85;
+}
+
+.tab--active {
+    background-color: #7872D8;
 }

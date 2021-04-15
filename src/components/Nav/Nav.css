@@ -1,7 +1,8 @@
 .nav {
     padding: 30px;
     display: flex;
-    background-color: darkseagreen;
+    background-color: #554DD8;
+    margin-bottom: 30px;
 }
 
 .nav .tab {

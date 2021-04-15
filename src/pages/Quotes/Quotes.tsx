@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Api } from "../../api/Api";
 
 import { Grid } from "../../components/Grid";
 import { Modal } from "../../components/Modal";
 
-import {Quote, QuotesType} from './Quotes.model';
+import { Quote, QuotesType } from './Quotes.model';
 
 const request = () => Api.request<QuotesType>('https://poloniex.com/public?command=returnTicker');
 
@@ -16,7 +16,7 @@ export const Quotes = () => {
   const modalData = useRef<Quote | null>(null);
 
   useEffect(() => {
-    fetchQuotes();
+    fetchQuotes(true);
   }, [])
 
 
@@ -37,23 +37,26 @@ export const Quotes = () => {
   }, [isVisibleModal]);
 
 
-  const fetchQuotes = () => {
-    setFetching(true);
+  const fetchQuotes = (isFetching?: boolean) => {
+    isFetching && setFetching(true);
     request()
         .then((response) => {
           setQuotes((prevQuotes) => ({
               ...prevQuotes,
               ...response,
           }));
-          setFetching(false);
+          isFetching && setFetching(false);
         })
-        .catch((e) => console.log(e))
+        .catch((error) => {
+          console.log(error);
+          isFetching && setFetching(false);
+        })
   }
 
-  const handleClick = (data: Quote) => {
+  const handleClick = useCallback((data: Quote) => {
     setVisibleModal(true);
     modalData.current = data;
-  };
+  }, []);
 
   const handleClose = () => {
     setVisibleModal(false);
