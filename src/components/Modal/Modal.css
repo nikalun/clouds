@@ -1,0 +1,25 @@
+.modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: baseline;
+    padding: 40px;
+    min-width: 250px;
+    box-shadow: 0 0 1px 0 black;
+    background-color: #ffffff;
+}
+
+.modal__close {
+    align-self: flex-end;
+}
+
+.modal__body {
+    margin-bottom: 15px;
+}
+
+.modal__header {
+    font-weight: bold;
+}

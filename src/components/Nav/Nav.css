@@ -1,0 +1,18 @@
+.nav {
+    padding: 30px;
+    display: flex;
+    background-color: darkseagreen;
+}
+
+.nav .tab {
+    background-color: transparent;
+}
+
+.nav__link {
+    text-decoration: none;
+    color: white;
+}
+
+.nav__link:not(:last-of-type) {
+    margin-right: 15px;
+}

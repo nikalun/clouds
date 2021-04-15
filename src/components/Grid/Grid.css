@@ -1,0 +1,21 @@
+.grid {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.grid__row {
+    cursor: pointer;
+}
+
+.grid__row:hover .grid__cell {
+    background-color: #c2c2c2;
+}
+
+.grid__cell {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.grid__head {
+    padding: 10px;
+}
