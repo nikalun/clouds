@@ -6,13 +6,14 @@ import { Modal } from "../../components/Modal";
 import { Notification } from "../../components/Notification";
 import { Preloader } from "../../components/Preloader";
 
-import { Quote, QuotesType } from './Quotes.model';
+import { Quote, QuotesType, QuotesProps } from './Quotes.model';
 
 import './Quotes.css';
 
 const request = () => Api.request<QuotesType>('https://poloniex.com/public?command=returnTicker');
 
-export const Quotes = () => {
+export const Quotes = (props: QuotesProps) => {
+  const { path } = props;
   const [quotes, setQuotes] = useState<QuotesType>({});
   const [isFetching, setFetching] = useState(false);
   const [isVisibleModal, setVisibleModal] = useState(false);
@@ -77,6 +78,7 @@ export const Quotes = () => {
           ? <Preloader />
           : (
               <Grid
+                path={path}
                 data={quotes}
                 onClick={handleClick}
               />

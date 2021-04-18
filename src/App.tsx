@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import './App.css';
 
-import { Nav } from "./components/Nav";
+import { Navs } from "./components/Navs";
 import { Quotes } from "./pages/Quotes";
 import { About } from "./pages/About";
 
@@ -12,12 +12,12 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <header>
-          <Nav />
+          <Navs />
         </header>
         <main>
           <Switch>
             <Route exact path="/" component={About} />
-            <Route exact path="/quotes" component={Quotes} />
+            <Route path="/quotes/:path" render={({ match: { params : { path }}}) => <Quotes path={path} />} />
           </Switch>
         </main>
       </div>

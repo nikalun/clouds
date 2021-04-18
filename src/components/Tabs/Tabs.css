@@ -1,7 +1,0 @@
-.tabs {
-    display: flex;
-}
-
-.tabs .tab:not(:last-of-type) {
-    margin-right: 15px;
-}

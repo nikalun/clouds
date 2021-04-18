@@ -12,4 +12,8 @@ export type Quote = {
   quoteVolume: string;
 };
 
+export type QuotesProps = {
+  path: string;
+};
+
 export type QuotesType = Record<string, Quote>;

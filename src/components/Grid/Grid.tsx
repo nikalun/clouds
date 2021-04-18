@@ -1,6 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
-
-import { Tabs } from "../Tabs";
+import React, { memo, useCallback } from "react";
 
 import { Quote, QuotesType } from "../../pages/Quotes/Quotes.model";
 
@@ -8,51 +6,34 @@ import './Grid.css';
 
 
 type GridProps = {
+  path: string;
   data: QuotesType;
   onClick: (data: Quote) => void;
 };
 
-type ActiveIds = 'quoteA' | 'quoteB';
-
-const tabs = [
-  {
-    id: 'quoteA',
-    value: 'Котировки А',
-  },
-  {
-    id: 'quoteB',
-    value: 'Котировки Б',
-  }
-];
-
 export const Grid = memo<GridProps>((props) => {
-  const { data, onClick } = props;
-  const [activeTab, setActiveTab] = useState<ActiveIds>('quoteA');
+  const { path, data, onClick } = props;
   const gridData = Object.entries(data);
+
+  const isFirst = path === 'first';
 
   const handleClick = useCallback((value: Quote) => () => {
     onClick(value);
   },[onClick]);
 
-  const handleTabsClick = useCallback((value) => {
-    setActiveTab(value);
-  }, [setActiveTab]);
-
   return (
       <>
-        <Tabs data={tabs} onClick={handleTabsClick} />
         <table className="grid">
           <thead>
           <tr>
             <th className="grid__head">Currency</th>
-            {activeTab === 'quoteA' && (
+            {isFirst ? (
               <>
                 <th className="grid__head">Last</th>
                 <th className="grid__head">Highest Bid</th>
                 <th className="grid__head">Percent Change</th>
               </>
-            )}
-            {activeTab === 'quoteB' && (
+            ) : (
               <>
                 <th className="grid__head">Id</th>
                 <th className="grid__head">Is Frozen</th>
@@ -70,27 +51,24 @@ export const Grid = memo<GridProps>((props) => {
           {gridData.map(([key, value]) => (
               <tr className="grid__row" key={value.id} onClick={handleClick(value)}>
                 <td className="grid__cell">{key}</td>
-                {activeTab === 'quoteA' && (
+                {isFirst ? (
                   <>
                     <td className="grid__cell">{value.last}</td>
                     <td className="grid__cell">{value.highestBid}</td>
                     <td className="grid__cell">{value.percentChange}</td>
                   </>
+                ) : (
+                  <>
+                    <td className="grid__cell">{value.id}</td>
+                    <td className="grid__cell">{value.isFrozen}</td>
+                    <td className="grid__cell">{value.baseVolume}</td>
+                    <td className="grid__cell">{value.low24hr}</td>
+                    <td className="grid__cell">{value.lowestAsk}</td>
+                    <td className="grid__cell">{value.percentChange}</td>
+                    <td className="grid__cell">{value.postOnly}</td>
+                    <td className="grid__cell">{value.quoteVolume}</td>
+                  </>
                 )}
-                {
-                  activeTab === 'quoteB' && (
-                    <>
-                      <td className="grid__cell">{value.id}</td>
-                      <td className="grid__cell">{value.isFrozen}</td>
-                      <td className="grid__cell">{value.baseVolume}</td>
-                      <td className="grid__cell">{value.low24hr}</td>
-                      <td className="grid__cell">{value.lowestAsk}</td>
-                      <td className="grid__cell">{value.percentChange}</td>
-                      <td className="grid__cell">{value.postOnly}</td>
-                      <td className="grid__cell">{value.quoteVolume}</td>
-                    </>
-                  )
-                }
               </tr>
           ))}
           </tbody>

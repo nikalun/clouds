@@ -1,0 +1,11 @@
+.navs {
+    padding: 30px;
+    display: flex;
+    background-color: #554DD8;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+.navs .nav:not(:last-of-type) {
+    margin-right: 20px;
+}

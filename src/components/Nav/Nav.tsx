@@ -1,28 +1,30 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import classnames from 'classnames';
 
-import { Tabs } from "../Tabs";
+import { NavProps } from "./Nav.model";
 
 import './Nav.css';
 
-const links = [
-  {
-    id: 1,
-    url: '/',
-    value: 'О приложении',
-    className: 'nav__link',
-  },
-  {
-    id: 2,
-    url: '/quotes',
-    value: 'Котировки',
-    className: 'nav__link'
-  }
-];
+export const Nav = (props: NavProps) => {
+  const {
+    value,
+    url,
+    isActive,
+    onClick,
+  } = props;
 
-export const Nav = () => {
+  const container = classnames('nav', {
+    'nav--active': isActive,
+  });
+
   return (
-    <div className="nav">
-      <Tabs data={links} />
-    </div>
+      <Link
+        className={container}
+        onClick={onClick}
+        to={url}
+      >
+        {value}
+      </Link>
   )
 };

@@ -1,19 +1,9 @@
 .nav {
-    padding: 30px;
-    display: flex;
-    background-color: #554DD8;
-    margin-bottom: 30px;
-}
-
-.nav .tab {
-    background-color: transparent;
-}
-
-.nav__link {
+    padding: 10px;
+    color: #ffffff;
     text-decoration: none;
-    color: white;
 }
 
-.nav__link:not(:last-of-type) {
-    margin-right: 15px;
+.nav--active {
+    color: cornflowerblue;
 }
