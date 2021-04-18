@@ -21,8 +21,8 @@ export const Quotes = (props: QuotesProps) => {
 
   const modalData = useRef<Quote | null>(null);
 
-  const fetchQuotes = useCallback((isFetching?: boolean) => {
-    isFetching && setFetching(true);
+  const fetchQuotes = useCallback((isFirstRequest?: boolean) => {
+    isFirstRequest && setFetching(true);
     request()
         .then((response) => {
           setQuotes((prevQuotes) => ({
@@ -37,7 +37,7 @@ export const Quotes = (props: QuotesProps) => {
           setError(true);
           isFetching && setFetching(false);
         })
-  }, [isError]);
+  }, [isError, isFetching]);
 
   useEffect(() => {
     fetchQuotes(true);

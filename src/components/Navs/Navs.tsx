@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 
 import { Nav } from "../Nav";
 
@@ -22,25 +22,13 @@ const links = [
   },
 ];
 
-export const Navs = () => {
-  const [active, setActive] = useState(0);
-
-  const handleClick = (index: number) => () => {
-    setActive(index);
-  }
-
-  return (
-    <div className="navs">
-      {links.map((nav, index) => {
-        return (
-            <Nav
-                {...nav}
-                isActive={active === index}
-                onClick={handleClick(index)}
-                key={nav.id}
-            />
-        );
-      })}
-    </div>
-  )
-};
+export const Navs = () => (
+  <div className="navs">
+    {links.map((nav) => (
+      <Nav
+        {...nav}
+        key={nav.id}
+      />
+    ))}
+  </div>
+);

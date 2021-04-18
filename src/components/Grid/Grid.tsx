@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo } from "react";
 
 import { Quote, QuotesType } from "../../pages/Quotes/Quotes.model";
 
@@ -17,9 +17,9 @@ export const Grid = memo<GridProps>((props) => {
 
   const isFirst = path === 'first';
 
-  const handleClick = useCallback((value: Quote) => () => {
+  const handleClick = (value: Quote) => () => {
     onClick(value);
-  },[onClick]);
+  };
 
   return (
       <>

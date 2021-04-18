@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import classnames from 'classnames';
+import { NavLink } from "react-router-dom";
 
 import { NavProps } from "./Nav.model";
 
@@ -10,21 +9,16 @@ export const Nav = (props: NavProps) => {
   const {
     value,
     url,
-    isActive,
-    onClick,
   } = props;
 
-  const container = classnames('nav', {
-    'nav--active': isActive,
-  });
-
   return (
-      <Link
-        className={container}
-        onClick={onClick}
+      <NavLink
+        exact
+        className="nav"
+        activeClassName="nav--active"
         to={url}
       >
         {value}
-      </Link>
+      </NavLink>
   )
 };
