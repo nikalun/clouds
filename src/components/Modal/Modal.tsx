@@ -10,7 +10,7 @@ type ModalProps = {
 
 export const Modal = (props: ModalProps) => {
   const { data, onClose } = props;
-  console.log(data);
+
   return (
     <div className="modal">
       <div className="modal__header">Данные по котировке</div>

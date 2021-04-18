@@ -3,8 +3,12 @@ import { Api } from "../../api/Api";
 
 import { Grid } from "../../components/Grid";
 import { Modal } from "../../components/Modal";
+import { Notification } from "../../components/Notification";
+import { Preloader } from "../../components/Preloader";
 
 import { Quote, QuotesType } from './Quotes.model';
+
+import './Quotes.css';
 
 const request = () => Api.request<QuotesType>('https://poloniex.com/public?command=returnTicker');
 
@@ -12,11 +16,31 @@ export const Quotes = () => {
   const [quotes, setQuotes] = useState<QuotesType>({});
   const [isFetching, setFetching] = useState(false);
   const [isVisibleModal, setVisibleModal] = useState(false);
+  const [isError, setError] = useState(false);
 
   const modalData = useRef<Quote | null>(null);
 
+  const fetchQuotes = useCallback((isFetching?: boolean) => {
+    isFetching && setFetching(true);
+    request()
+        .then((response) => {
+          setQuotes((prevQuotes) => ({
+            ...prevQuotes,
+            ...response,
+          }));
+          isError && setError(false);
+          isFetching && setFetching(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setError(true);
+          isFetching && setFetching(false);
+        })
+  }, [isError]);
+
   useEffect(() => {
     fetchQuotes(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -34,24 +58,7 @@ export const Quotes = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [isVisibleModal]);
-
-
-  const fetchQuotes = (isFetching?: boolean) => {
-    isFetching && setFetching(true);
-    request()
-        .then((response) => {
-          setQuotes((prevQuotes) => ({
-              ...prevQuotes,
-              ...response,
-          }));
-          isFetching && setFetching(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          isFetching && setFetching(false);
-        })
-  }
+  }, [isVisibleModal, fetchQuotes]);
 
   const handleClick = useCallback((data: Quote) => {
     setVisibleModal(true);
@@ -64,9 +71,22 @@ export const Quotes = () => {
   };
 
   return (
-    <div>
-      {isFetching ? 'Preloader' : <Grid data={quotes} onClick={handleClick} />}
-      {isVisibleModal && <Modal data={modalData.current} onClose={handleClose} />}
+    <div className="quotes">
+      {isError && <Notification />}
+      {isFetching
+          ? <Preloader />
+          : (
+              <Grid
+                data={quotes}
+                onClick={handleClick}
+              />
+          )}
+      {isVisibleModal && (
+          <Modal
+            data={modalData.current}
+            onClose={handleClose}
+          />
+      )}
     </div>
   )
 }

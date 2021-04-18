@@ -1,0 +1,5 @@
+.quotes {
+    padding: 0 10px 10px 10px;
+    height: calc(100Vh - 141px);
+    overflow: scroll;
+}
