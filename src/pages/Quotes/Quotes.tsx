@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
+import { observer, useLocalObservable } from 'mobx-react'
 import { Api } from "../../api/Api";
 
 import { Grid } from "../../components/Grid";
@@ -12,32 +13,48 @@ import './Quotes.css';
 
 const request = () => Api.request<QuotesType>('https://poloniex.com/public?command=returnTicker');
 
-export const Quotes = (props: QuotesProps) => {
+export const Quotes = observer((props: QuotesProps) => {
   const { path } = props;
-  const [quotes, setQuotes] = useState<QuotesType>({});
-  const [isFetching, setFetching] = useState(false);
-  const [isVisibleModal, setVisibleModal] = useState(false);
-  const [isError, setError] = useState(false);
+
+  const store = useLocalObservable(() => ({
+    quotes: {},
+    isFetching: false,
+    isVisibleModal: false,
+    isError: false,
+    setFetching(value: boolean) {
+      this.isFetching = value;
+    },
+    setError(value: boolean) {
+      this.isError = value;
+    },
+    setQuotes(quotes: QuotesType) {
+      this.quotes = {
+        ...this.quotes,
+        ...quotes,
+      };
+    },
+    setVisibleModal(value: boolean) {
+      this.isVisibleModal = value;
+    }
+  }))
 
   const modalData = useRef<Quote | null>(null);
 
   const fetchQuotes = useCallback((isFirstRequest?: boolean) => {
-    isFirstRequest && setFetching(true);
+    isFirstRequest && store.setFetching(true);
     request()
         .then((response) => {
-          setQuotes((prevQuotes) => ({
-            ...prevQuotes,
-            ...response,
-          }));
-          isError && setError(false);
-          isFetching && setFetching(false);
+          store.setQuotes(response);
+          store.isError && store.setError(false);
+          store.isFetching && store.setFetching(false);
         })
         .catch((error) => {
           console.log(error);
-          setError(true);
-          isFetching && setFetching(false);
+          store.setError(true);
+          
+          store.isFetching && store.setFetching(false); 
         })
-  }, [isError, isFetching]);
+  }, [store.isError, store.setError, store.isFetching, store.setFetching, store.setQuotes]);
 
   useEffect(() => {
     fetchQuotes(true);
@@ -48,42 +65,42 @@ export const Quotes = (props: QuotesProps) => {
   useEffect(() => {
     let interval = setInterval(fetchQuotes, 5000);
 
-    if (isVisibleModal) {
+    if (store.isVisibleModal) {
       clearInterval(interval)
     }
 
-    if (!isVisibleModal && !interval) {
+    if (!store.isVisibleModal && !interval) {
       interval = setInterval(fetchQuotes, 5000);
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [isVisibleModal, fetchQuotes]);
+  }, [store.isVisibleModal, fetchQuotes]);
 
   const handleClick = useCallback((data: Quote) => {
-    setVisibleModal(true);
+    store.setVisibleModal(true);
     modalData.current = data;
   }, []);
 
   const handleClose = () => {
-    setVisibleModal(false);
+    store.setVisibleModal(false);
     modalData.current = null;
   };
 
   return (
     <div className="quotes">
-      {isError && <Notification />}
-      {isFetching
+      {store.isError && <Notification />}
+      {store.isFetching
           ? <Preloader />
           : (
               <Grid
                 path={path}
-                data={quotes}
+                data={store.quotes}
                 onClick={handleClick}
               />
           )}
-      {isVisibleModal && (
+      {store.isVisibleModal && (
           <Modal
             data={modalData.current}
             onClose={handleClose}
@@ -91,4 +108,4 @@ export const Quotes = (props: QuotesProps) => {
       )}
     </div>
   )
-}
+})

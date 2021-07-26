@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { observer } from 'mobx-react';
 
 import { Quote, QuotesType } from "../../pages/Quotes/Quotes.model";
 
@@ -11,7 +12,7 @@ type GridProps = {
   onClick: (data: Quote) => void;
 };
 
-export const Grid = memo<GridProps>((props) => {
+export const Grid = observer((props: GridProps) => {
   const { path, data, onClick } = props;
   const gridData = Object.entries(data);
 
